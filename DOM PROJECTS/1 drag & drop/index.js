@@ -1,7 +1,5 @@
 const draggables = document.querySelectorAll(".draggable");
 const containers = document.querySelectorAll(".container");
-console.log(draggables);
-console.log(containers);
 
 draggables.forEach((draggable) => {
   draggable.addEventListener("dragstart", function (event) {
@@ -15,10 +13,12 @@ draggables.forEach((draggable) => {
 
 containers.forEach((container) => {
   container.addEventListener("dragover", (e) => {
-    const draggableElement = getDragAfterElement(container, e.clientY);
     e.preventDefault();
+    const afterElement = getDragAfterElement(container, e.clientY);
+    // console.log(afterElement);
     const draggable = document.querySelector(".dragging");
-    container.append(draggable);
+    if (afterElement === null) container.appendChild(draggable);
+    else container.insertBefore(draggable, afterElement);
   });
 });
 
@@ -26,6 +26,22 @@ function getDragAfterElement(container, y) {
   const draggableElements = [
     ...container.querySelectorAll(".draggable:not(.dragging)"),
   ];
+  // console.log(draggableElements);
 
-  draggableElements.reduce();
+  return draggableElements.reduce(
+    (closest, child) => {
+      const box = child.getBoundingClientRect();
+      const offset = y - box.top - box.height / 2;
+      if (offset < 0 && offset > closest.offset) {
+        // console.log(child);
+        return { offset: offset, element: child };
+      } else {
+        // console.log(closest);
+        return closest;
+      }
+    },
+    {
+      offset: Number.NEGATIVE_INFINITY,
+    }
+  ).element;
 }
