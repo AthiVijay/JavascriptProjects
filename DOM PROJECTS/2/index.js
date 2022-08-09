@@ -19,28 +19,28 @@ element.ondrag = function (event) {
   setElementCoordinatesFromEvent(this, event);
 };
 
-document.addEventListener('click', function (evt) {
+const [btn] = document.getElementsByClassName('btn');
 
-  if(evt.detail === 3){
+btn.addEventListener('click', function(){
+  // console.log('Button is clicked');
+  console.log('Triple click');
+  const item = document.createElement("div");
+  item.classList.add('circle');
+  item.setAttribute("draggable", "true");
+  item.style.position = "absolute";
 
-      console.log('Triple click');
-      const item = document.createElement("div");
-      item.classList.add('circle');
-      item.setAttribute("draggable", "true");
-      item.style.position = "absolute";
+  item.ondragend = function (event) {
+    setElementCoordinatesFromEvent(this, event);
+  };
+  
+  item.ondrag = function (event) {
+    setElementCoordinatesFromEvent(this, event);
+  };
 
-      item.ondragend = function (event) {
-        setElementCoordinatesFromEvent(this, event);
-      };
-      
-      item.ondrag = function (event) {
-        setElementCoordinatesFromEvent(this, event);
-      };
+  document.body.appendChild(item);
 
-      document.body.appendChild(item);
-    
-    
-    }
 
-}
-);
+
+});
+
+
